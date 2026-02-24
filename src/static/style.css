@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.container {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+input,
+button {
+  margin: 0.25rem 0.25rem 0.25rem 0;
+  padding: 0.5rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dark-mode {
+  background: #1f1f1f;
+  color: #f3f3f3;
+}
+
+.dark-mode section {
+  border-color: #555;
+}
