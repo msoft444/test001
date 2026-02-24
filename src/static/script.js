@@ -19,7 +19,7 @@ function calculateDateDifference() {
   }
 
   const diffMs = endDate.getTime() - startDate.getTime();
-  const diffDays = diffMs / (24 * 60 * 60 * 1000);
+  const diffDays = Math.round(diffMs / (24 * 60 * 60 * 1000));
   result.textContent = `差分: ${diffDays} 日`;
 }
 
@@ -46,3 +46,25 @@ function toggleDarkMode() {
 document.getElementById("calculate-diff").addEventListener("click", calculateDateDifference);
 document.getElementById("calculate-offset").addEventListener("click", calculateOffsetDate);
 document.getElementById("dark-mode-toggle").addEventListener("change", toggleDarkMode);
+
+function updateClock() {
+  const now = new Date();
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  const secondDegrees = ((seconds / 60) * 360) + 90;
+  const minuteDegrees = ((minutes / 60) * 360) + ((seconds/60)*6) + 90;
+  const hourDegrees = ((hours / 12) * 360) + ((minutes/60)*30) + 90;
+
+  const secondHand = document.querySelector('.hand.second');
+  const minuteHand = document.querySelector('.hand.minute');
+  const hourHand = document.querySelector('.hand.hour');
+
+  if(secondHand) secondHand.style.transform = `rotate(${secondDegrees}deg)`;
+  if(minuteHand) minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
+  if(hourHand) hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+}
+
+setInterval(updateClock, 1000);
+updateClock();

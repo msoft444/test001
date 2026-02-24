@@ -30,6 +30,11 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         html = self.html_path.read_text(encoding="utf-8")
         self.assertIn('id="dark-mode-toggle"', html)
 
+    def test_html_has_analog_clock_anchor_at_page_top(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn('id="analog-clock"', html)
+
     def test_script_exists_and_implements_required_handlers(self):
         self.assertTrue(self.js_path.exists(), "script.js が存在しません")
         script = self.js_path.read_text(encoding="utf-8")
@@ -41,6 +46,12 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         self.assertTrue(self.css_path.exists(), "style.css が存在しません")
         css = self.css_path.read_text(encoding="utf-8")
         self.assertIn('.dark-mode', css)
+
+    def test_style_has_stylish_animations(self):
+        self.assertTrue(self.css_path.exists(), "style.css が存在しません")
+        css = self.css_path.read_text(encoding="utf-8")
+        self.assertIn('@keyframes', css)
+        self.assertIn('animation:', css)
 
     def test_dockerfile_exists_and_uses_python_http_server(self):
         self.assertTrue(self.dockerfile_path.exists(), "Dockerfile が存在しません")

@@ -8,28 +8,58 @@
 </head>
 <body>
   <main class="container">
+    <div class="clock-container">
+      <div class="clock" id="analog-clock">
+        <div class="hand hour" id="hour-hand"></div>
+        <div class="hand minute" id="minute-hand"></div>
+        <div class="hand second" id="second-hand"></div>
+        <div class="center-point"></div>
+        <div class="number number1"><span>1</span></div>
+        <div class="number number2"><span>2</span></div>
+        <div class="number number3"><span>3</span></div>
+        <div class="number number4"><span>4</span></div>
+        <div class="number number5"><span>5</span></div>
+        <div class="number number6"><span>6</span></div>
+        <div class="number number7"><span>7</span></div>
+        <div class="number number8"><span>8</span></div>
+        <div class="number number9"><span>9</span></div>
+        <div class="number number10"><span>10</span></div>
+        <div class="number number11"><span>11</span></div>
+        <div class="number number12"><span>12</span></div>
+      </div>
+    </div>
+
     <h1>日付計算アプリ</h1>
 
-    <label class="toggle">
+    <label class="toggle-switch">
       <input id="dark-mode-toggle" type="checkbox">
-      ダークモード
+      <span class="slider"></span>
+      <span class="label-text">ダークモード</span>
     </label>
 
-    <section>
+    <div class="card">
       <h2>2つの日時の差</h2>
-      <input id="start-datetime" type="datetime-local">
-      <input id="end-datetime" type="datetime-local">
-      <button id="calculate-diff" type="button">差分を計算</button>
-      <p id="diff-result"></p>
-    </section>
+      <div class="input-group">
+        <input id="start-datetime" type="datetime-local">
+        <input id="end-datetime" type="datetime-local">
+      </div>
+      <button id="calculate-diff" type="button" class="btn-primary">差分を計算</button>
+      <div class="result-area">
+        <p id="diff-result"></p>
+      </div>
+    </div>
 
-    <section>
+    <div class="card">
       <h2>日時の加減算</h2>
-      <input id="base-datetime" type="datetime-local">
-      <input id="day-offset" type="number" step="1" placeholder="日数">
-      <button id="calculate-offset" type="button">日時を計算</button>
-      <p id="offset-result"></p>
-    </section>
+      <div class="input-group">
+        <input id="base-datetime" type="datetime-local">
+        <input id="day-offset" type="number" step="1" placeholder="日数">
+      </div>
+      <button id="calculate-offset" type="button" class="btn-primary">日時を計算</button>
+      <div class="result-area">
+        <p id="offset-result"></p>
+      </div>
+    </div>
   </main>
 
   <script src="script.js"></script>
