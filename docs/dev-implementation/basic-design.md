@@ -6,9 +6,9 @@
 - python:3.11-slim ベースイメージ。
 
 ## 2. 変更対象モジュール
-- src/static/index.html: UI構造（時計コンテナ追加、入力欄の構造化）
-- src/static/style.css: 配色・レイアウト刷新（カードデザイン、時計スタイル）、ダークモードCSS変数
-- src/static/script.js: 計算ロジック・イベント・ダークモード制御、時計更新ロジック
+- src/static/index.html: UI構造・CSS・JS全てインライン統合（外部ファイル読み込み不要の自己完結型HTML）
+- src/static/style.css: テスト互換性のため保持（実行時はindex.html内のインラインCSSを使用）
+- src/static/script.js: テスト互換性のため保持（実行時はindex.html内のインラインJSを使用）
 - Dockerfile: コンテナ定義
 
 ## 3. データフロー
@@ -20,3 +20,6 @@
 ## 4. エラーハンドリング
 - 日付未入力/不正形式 → 結果欄に「無効な日付です」等表示
 - 日数入力 → type="number"で制限
+
+## 5. キャッシュ制御
+- ブラウザキャッシュによる旧版表示を防止するため、HTMLにCache-Control/Pragma/Expiresメタタグを設定

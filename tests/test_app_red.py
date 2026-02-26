@@ -34,6 +34,31 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         self.assertTrue(self.html_path.exists(), "index.html が存在しません")
         html = self.html_path.read_text(encoding="utf-8")
         self.assertIn('id="analog-clock"', html)
+        self.assertIn('class="clock"', html)
+
+    def test_html_is_self_contained_without_external_css_js_dependencies(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn("<style>", html)
+        self.assertIn("<script>", html)
+        self.assertNotIn('rel="stylesheet"', html)
+        self.assertNotIn('src="script.js"', html)
+
+    def test_inline_style_contains_stylish_ui_and_clock_layout_rules(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn(".clock {", html)
+        self.assertIn(".number1", html)
+        self.assertIn(".card {", html)
+        self.assertIn(".toggle-switch", html)
+        self.assertIn("@keyframes fadeInUp", html)
+
+    def test_inline_script_contains_clock_update_loop(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn("function updateClock()", html)
+        self.assertIn("document.querySelector('.hand.second')", html)
+        self.assertIn("setInterval(updateClock, 1000)", html)
 
     def test_script_exists_and_implements_required_handlers(self):
         self.assertTrue(self.js_path.exists(), "script.js が存在しません")
