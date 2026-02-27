@@ -115,18 +115,49 @@ h1 {
 .map-container {
   width: 100%;
   height: 160px;
-  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* Fallback */
-  background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%); /* Light blue for day */
   border-radius: 8px;
   position: relative;
   cursor: pointer;
   border: 1px solid var(--input-border);
   overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 45%),
+    linear-gradient(to bottom, #9dd7ff 0%, #3a8bdc 100%);
+}
+
+.map-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.18) 0,
+      rgba(255, 255, 255, 0.18) 1px,
+      transparent 1px,
+      transparent 22px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.12) 0,
+      rgba(255, 255, 255, 0.12) 1px,
+      transparent 1px,
+      transparent 22px
+    );
+  opacity: 0.45;
 }
 
 body.dark-mode .map-container {
-   background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-   border-color: #444;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0) 55%),
+    linear-gradient(to bottom, #0b1b2b 0%, #102a43 60%, #143b5a 100%);
+  border-color: #444;
+}
+
+body.dark-mode .map-container::before {
+  opacity: 0.25;
 }
 
 .world-map-svg {
@@ -139,15 +170,19 @@ body.dark-mode .map-container {
 }
 
 .world-map-svg path {
-  fill: rgba(76, 175, 80, 0.25);
-  stroke: rgba(76, 175, 80, 0.5);
-  stroke-width: 0.4;
+  fill: #5cb85f;
+  fill-opacity: 0.5;
+  stroke: #2e7d32;
+  stroke-opacity: 0.75;
+  stroke-width: 0.5;
   stroke-linejoin: round;
 }
 
 body.dark-mode .world-map-svg path {
-  fill: rgba(100, 200, 120, 0.2);
-  stroke: rgba(100, 200, 120, 0.4);
+  fill: #4caf50;
+  fill-opacity: 0.35;
+  stroke: #81c784;
+  stroke-opacity: 0.55;
 }
 
 .city-dot {
@@ -449,31 +484,47 @@ p {
           <div class="city-time" id="selected-city-time">--:--:--</div>
         </div>
         <div class="map-container" id="world-map">
-          <svg class="world-map-svg" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- North America -->
-            <path d="M5,20 L10,14 L18,11 L24,10 L30,12 L33,18 L32,26 L30,32 L27,37 L24,42 L20,45 L17,42 L14,38 L11,32 L8,27Z"/>
+          <svg class="world-map-svg" viewBox="0 0 200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-label="world map">
+            <!-- Improved world map with recognizable continent silhouettes -->
+            <!-- North America: Alaska, Canada, US coastline, Gulf of Mexico, Mexico -->
+            <path d="M8,16 L12,13 L18,12 L22,10 L30,10 L38,11 L44,13 L50,11 L56,12 L62,15 L66,18 L64,20 L60,22 L58,26 L56,30 L56,34 L55,37 L54,40 L50,40 L47,42 L44,44 L40,42 L36,38 L32,36 L30,35 L28,30 L27,24 L26,18 L22,16 L16,15 L10,16 Z" />
             <!-- Greenland -->
-            <path d="M30,5 L37,3 L41,6 L40,12 L36,14 L32,11 L30,8Z"/>
-            <!-- South America -->
-            <path d="M24,55 L30,51 L36,53 L39,58 L38,68 L36,78 L33,86 L28,90 L25,83 L23,73 L22,63Z"/>
-            <!-- Europe -->
-            <path d="M46,15 L50,11 L55,13 L58,18 L57,24 L54,30 L51,33 L48,30 L46,24 L45,19Z"/>
-            <!-- Africa -->
-            <path d="M48,35 L54,33 L60,36 L64,43 L66,53 L65,63 L62,72 L57,78 L52,74 L48,65 L46,53 L47,43Z"/>
-            <!-- Middle East / Central Asia -->
-            <path d="M60,22 L66,18 L72,20 L76,25 L74,32 L68,36 L62,33 L60,28Z"/>
-            <!-- East Asia -->
-            <path d="M74,12 L82,10 L90,14 L95,22 L94,32 L90,38 L84,42 L78,40 L74,34 L72,26 L73,18Z"/>
-            <!-- India / SE Asia -->
-            <path d="M70,38 L76,36 L80,42 L79,50 L76,55 L72,56 L68,50 L68,44Z"/>
-            <!-- Indonesia -->
-            <path d="M78,54 L84,52 L90,54 L92,58 L88,60 L82,58Z"/>
-            <!-- Japan -->
-            <path d="M90,18 L93,14 L95,18 L94,26 L91,24Z"/>
+            <path d="M62,4 L68,3 L75,5 L78,9 L76,13 L70,15 L64,13 L60,9 Z" />
+            <!-- South America: Brazil bulge, tapers to Tierra del Fuego -->
+            <path d="M48,48 L54,46 L62,47 L68,50 L74,56 L76,62 L74,68 L72,74 L68,80 L64,85 L60,88 L56,86 L56,80 L58,74 L60,68 L58,62 L54,56 L50,50 Z" />
+            <!-- UK / Ireland -->
+            <path d="M92,16 L95,15 L97,17 L96,20 L93,20 Z" />
+            <!-- Scandinavia -->
+            <path d="M103,10 L107,8 L111,10 L112,15 L110,18 L106,18 L103,14 Z" />
+            <!-- Europe mainland: Iberia, France, Central Europe -->
+            <path d="M88,28 L90,24 L94,22 L100,20 L106,20 L112,22 L114,26 L110,30 L106,32 L100,32 L96,30 L92,30 Z" />
+            <!-- Italian Peninsula -->
+            <path d="M104,32 L106,34 L105,38 L102,36 Z" />
+            <!-- Africa: NW bulge, Horn of Africa, southern taper -->
+            <path d="M88,34 L94,32 L102,32 L110,34 L118,36 L122,40 L124,48 L124,56 L122,62 L118,68 L112,74 L106,76 L100,72 L96,64 L92,56 L90,48 L88,40 Z" />
+            <!-- Madagascar -->
+            <path d="M126,62 L128,60 L130,64 L128,70 L126,68 Z" />
+            <!-- Arabian Peninsula / Middle East -->
+            <path d="M118,30 L124,28 L132,30 L136,34 L134,40 L130,44 L126,42 L122,38 L120,34 Z" />
+            <!-- Indian subcontinent -->
+            <path d="M136,32 L142,30 L148,34 L148,40 L146,46 L142,52 L138,48 L134,42 L134,36 Z" />
+            <!-- Asia mainland: Siberia, China, Mongolia -->
+            <path d="M112,18 L120,12 L130,8 L142,8 L154,10 L166,10 L176,14 L184,18 L190,24 L188,30 L182,34 L176,38 L168,40 L160,42 L152,42 L146,38 L142,32 L138,26 L132,20 L124,16 L118,14 Z" />
+            <!-- Korean Peninsula -->
+            <path d="M174,28 L176,26 L178,28 L178,34 L176,36 L174,34 Z" />
+            <!-- Japan: Hokkaido, Honshu, Shikoku, Kyushu -->
+            <path d="M178,22 L182,20 L184,24 L184,30 L182,34 L180,38 L176,36 L176,30 L178,26 Z" />
+            <!-- SE Asia peninsula: Thailand, Vietnam, Malaysia -->
+            <path d="M148,44 L154,42 L158,46 L160,52 L158,56 L154,58 L150,56 L148,50 Z" />
+            <!-- Indonesia / Philippines archipelago -->
+            <path d="M156,58 L162,56 L170,56 L178,58 L176,62 L168,64 L160,62 Z" />
+            <path d="M172,42 L174,40 L176,42 L176,48 L174,50 L172,48 Z" />
             <!-- Australia -->
-            <path d="M82,66 L90,63 L96,67 L98,75 L96,83 L90,86 L84,82 L82,74Z"/>
+            <path d="M156,68 L164,66 L174,66 L182,70 L188,76 L188,82 L184,86 L176,88 L168,86 L160,82 L156,76 Z" />
             <!-- New Zealand -->
-            <path d="M96,84 L98,82 L99,86 L97,90 L95,88Z"/>
+            <path d="M194,78 L196,76 L198,80 L196,86 L194,84 Z" />
+            <!-- Antarctica -->
+            <path d="M10,96 L50,94 L100,93 L150,94 L192,96 L172,98 L120,99 L60,99 L20,98 Z" />
           </svg>
           <!-- City dots will be added by JS -->
         </div>

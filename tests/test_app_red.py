@@ -54,6 +54,27 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         self.assertIn('updateWorldClock', html)
         self.assertIn('Tokyo', html)  # Default city
 
+    def test_world_map_svg_is_detailed_enough_to_be_recognizable(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn('class="world-map-svg"', html)
+        self.assertIn('viewBox="0 0 200 100"', html)
+        self.assertGreaterEqual(
+            html.count('<path d="'),
+            18,
+            "世界地図の輪郭パス数が不足しており、地図としての判別性が低い可能性があります",
+        )
+        self.assertIn("Antarctica", html)
+
+    def test_world_map_has_visual_aids_for_readability_in_both_modes(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn(".map-container::before", html)
+        self.assertIn("repeating-linear-gradient", html)
+        self.assertIn("body.dark-mode .map-container::before", html)
+        self.assertIn(".world-map-svg path", html)
+        self.assertIn("body.dark-mode .world-map-svg path", html)
+
     def test_world_clock_is_rendered_right_of_analog_clock_in_header(self):
         self.assertTrue(self.html_path.exists(), "index.html が存在しません")
         html = self.html_path.read_text(encoding="utf-8")
