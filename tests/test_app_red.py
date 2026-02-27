@@ -44,6 +44,26 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         self.assertNotIn('rel="stylesheet"', html)
         self.assertNotIn('src="script.js"', html)
 
+    def test_html_has_world_map_and_local_time(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn('id="world-map"', html)
+        self.assertIn('class="world-clock-container"', html)
+        self.assertIn('id="selected-city-name"', html)
+        self.assertIn('id="selected-city-time"', html)
+        self.assertIn('updateWorldClock', html)
+        self.assertIn('Tokyo', html)  # Default city
+
+    def test_world_clock_is_rendered_right_of_analog_clock_in_header(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        clock_index = html.find('<div class="clock" id="analog-clock">')
+        world_clock_index = html.find('<div class="world-clock-container">')
+        self.assertNotEqual(clock_index, -1)
+        self.assertNotEqual(world_clock_index, -1)
+        self.assertGreater(world_clock_index, clock_index)
+        self.assertIn('<div class="clock-container">', html)
+
     def test_inline_style_contains_stylish_ui_and_clock_layout_rules(self):
         self.assertTrue(self.html_path.exists(), "index.html が存在しません")
         html = self.html_path.read_text(encoding="utf-8")
@@ -59,6 +79,17 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         self.assertIn("function updateClock()", html)
         self.assertIn("document.querySelector('.hand.second')", html)
         self.assertIn("setInterval(updateClock, 1000)", html)
+
+    def test_inline_script_supports_city_selection_and_local_time_updates(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn("const cities = [", html)
+        self.assertIn("tz:", html)
+        self.assertIn("function initMap()", html)
+        self.assertIn("function selectCity(city)", html)
+        self.assertIn("document.addEventListener(\"DOMContentLoaded\", initMap)", html)
+        self.assertIn("new Intl.DateTimeFormat('ja-JP', options)", html)
+        self.assertIn("setInterval(updateWorldClock, 1000)", html)
 
     def test_script_exists_and_implements_required_handlers(self):
         self.assertTrue(self.js_path.exists(), "script.js が存在しません")

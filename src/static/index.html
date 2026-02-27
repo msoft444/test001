@@ -77,6 +77,122 @@ h1 {
   margin-bottom: 2rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.world-clock-container {
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInUp 0.5s ease;
+}
+
+.current-city-display {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.city-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+}
+
+.city-time {
+  font-size: 1.5rem;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.map-container {
+  width: 100%;
+  height: 160px;
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* Fallback */
+  background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%); /* Light blue for day */
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid var(--input-border);
+  overflow: hidden;
+}
+
+body.dark-mode .map-container {
+   background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+   border-color: #444;
+}
+
+.world-map-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.world-map-svg path {
+  fill: rgba(76, 175, 80, 0.25);
+  stroke: rgba(76, 175, 80, 0.5);
+  stroke-width: 0.4;
+  stroke-linejoin: round;
+}
+
+body.dark-mode .world-map-svg path {
+  fill: rgba(100, 200, 120, 0.2);
+  stroke: rgba(100, 200, 120, 0.4);
+}
+
+.city-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background-color: var(--accent-color);
+  border: 2px solid white;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  z-index: 2;
+}
+
+.city-dot:hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  z-index: 10;
+}
+
+.city-dot.active {
+  background-color: var(--primary-color);
+  transform: translate(-50%, -50%) scale(1.3);
+  box-shadow: 0 0 8px var(--primary-color);
+}
+
+.city-dot::after {
+  content: attr(data-city);
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0,0,0,0.7);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.city-dot:hover::after {
+  opacity: 1;
 }
 
 .clock {
@@ -326,6 +442,42 @@ p {
         <div class="number number11"><span>11</span></div>
         <div class="number number12"><span>12</span></div>
       </div>
+
+      <div class="world-clock-container">
+        <div class="current-city-display">
+          <div class="city-name" id="selected-city-name">Tokyo</div>
+          <div class="city-time" id="selected-city-time">--:--:--</div>
+        </div>
+        <div class="map-container" id="world-map">
+          <svg class="world-map-svg" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- North America -->
+            <path d="M5,20 L10,14 L18,11 L24,10 L30,12 L33,18 L32,26 L30,32 L27,37 L24,42 L20,45 L17,42 L14,38 L11,32 L8,27Z"/>
+            <!-- Greenland -->
+            <path d="M30,5 L37,3 L41,6 L40,12 L36,14 L32,11 L30,8Z"/>
+            <!-- South America -->
+            <path d="M24,55 L30,51 L36,53 L39,58 L38,68 L36,78 L33,86 L28,90 L25,83 L23,73 L22,63Z"/>
+            <!-- Europe -->
+            <path d="M46,15 L50,11 L55,13 L58,18 L57,24 L54,30 L51,33 L48,30 L46,24 L45,19Z"/>
+            <!-- Africa -->
+            <path d="M48,35 L54,33 L60,36 L64,43 L66,53 L65,63 L62,72 L57,78 L52,74 L48,65 L46,53 L47,43Z"/>
+            <!-- Middle East / Central Asia -->
+            <path d="M60,22 L66,18 L72,20 L76,25 L74,32 L68,36 L62,33 L60,28Z"/>
+            <!-- East Asia -->
+            <path d="M74,12 L82,10 L90,14 L95,22 L94,32 L90,38 L84,42 L78,40 L74,34 L72,26 L73,18Z"/>
+            <!-- India / SE Asia -->
+            <path d="M70,38 L76,36 L80,42 L79,50 L76,55 L72,56 L68,50 L68,44Z"/>
+            <!-- Indonesia -->
+            <path d="M78,54 L84,52 L90,54 L92,58 L88,60 L82,58Z"/>
+            <!-- Japan -->
+            <path d="M90,18 L93,14 L95,18 L94,26 L91,24Z"/>
+            <!-- Australia -->
+            <path d="M82,66 L90,63 L96,67 L98,75 L96,83 L90,86 L84,82 L82,74Z"/>
+            <!-- New Zealand -->
+            <path d="M96,84 L98,82 L99,86 L97,90 L95,88Z"/>
+          </svg>
+          <!-- City dots will be added by JS -->
+        </div>
+      </div>
     </div>
 
     <h1>日付計算アプリ</h1>
@@ -410,6 +562,69 @@ function toggleDarkMode() {
 document.getElementById("calculate-diff").addEventListener("click", calculateDateDifference);
 document.getElementById("calculate-offset").addEventListener("click", calculateOffsetDate);
 document.getElementById("dark-mode-toggle").addEventListener("change", toggleDarkMode);
+
+const cities = [
+  { name: "London", tz: "Europe/London", top: 25, left: 48 },
+  { name: "Paris", tz: "Europe/Paris", top: 28, left: 51 },
+  { name: "New York", tz: "America/New_York", top: 32, left: 28 },
+  { name: "Los Angeles", tz: "America/Los_Angeles", top: 35, left: 15 },
+  { name: "Tokyo", tz: "Asia/Tokyo", top: 35, left: 88 },
+  { name: "Singapore", tz: "Asia/Singapore", top: 55, left: 80 },
+  { name: "Dubai", tz: "Asia/Dubai", top: 40, left: 65 },
+  { name: "Sydney", tz: "Australia/Sydney", top: 80, left: 92 },
+  { name: "Rio de Janeiro", tz: "America/Sao_Paulo", top: 70, left: 35 }
+];
+
+let selectedCity = cities.find(c => c.name === "Tokyo");
+
+function initMap() {
+  const mapContainer = document.getElementById("world-map");
+  cities.forEach(city => {
+    const dot = document.createElement("div");
+    dot.className = "city-dot";
+    if (city.name === selectedCity.name) dot.classList.add("active");
+    dot.style.top = `${city.top}%`;
+    dot.style.left = `${city.left}%`;
+    dot.dataset.city = city.name;
+    dot.addEventListener("click", () => selectCity(city));
+    mapContainer.appendChild(dot);
+  });
+  updateWorldClock();
+}
+
+function selectCity(city) {
+  selectedCity = city;
+  document.getElementById("selected-city-name").textContent = city.name;
+  
+  // Update active dot visual
+  document.querySelectorAll(".city-dot").forEach(d => {
+    d.classList.toggle("active", d.dataset.city === city.name);
+  });
+  
+  updateWorldClock();
+}
+
+function updateWorldClock() {
+  if (!selectedCity) return;
+  const now = new Date();
+  const options = {
+    timeZone: selectedCity.tz,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  };
+  try {
+    const timeString = new Intl.DateTimeFormat('ja-JP', options).format(now);
+    document.getElementById("selected-city-time").textContent = timeString;
+  } catch (e) {
+    document.getElementById("selected-city-time").textContent = "--:--:--";
+    console.error(e);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initMap);
+setInterval(updateWorldClock, 1000);
 
 function updateClock() {
   const now = new Date();
