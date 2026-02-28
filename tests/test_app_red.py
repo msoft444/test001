@@ -30,6 +30,31 @@ class DateCalculatorAppRedTests(unittest.TestCase):
         html = self.html_path.read_text(encoding="utf-8")
         self.assertIn('id="dark-mode-toggle"', html)
 
+    def test_html_has_theme_selector_for_dark_cool_warm(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn('id="theme-select"', html)
+        self.assertIn('value="dark"', html)
+        self.assertIn('value="cool"', html)
+        self.assertIn('value="warm"', html)
+
+    def test_inline_script_validates_theme_with_whitelist_and_fallback(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn("['dark', 'cool', 'warm', 'system']", html)
+        self.assertIn('localStorage.getItem("theme")', html)
+        self.assertIn('localStorage.setItem("theme"', html)
+        self.assertIn('document.documentElement.setAttribute("data-theme"', html)
+        self.assertIn("const DEFAULT_THEME = 'dark'", html)
+
+    def test_inline_style_defines_cool_and_warm_theme_tokens(self):
+        self.assertTrue(self.html_path.exists(), "index.html が存在しません")
+        html = self.html_path.read_text(encoding="utf-8")
+        self.assertIn('[data-theme="cool"]', html)
+        self.assertIn('[data-theme="warm"]', html)
+        self.assertIn("--accent", html)
+        self.assertIn("--warning", html)
+
     def test_html_has_analog_clock_anchor_at_page_top(self):
         self.assertTrue(self.html_path.exists(), "index.html が存在しません")
         html = self.html_path.read_text(encoding="utf-8")
